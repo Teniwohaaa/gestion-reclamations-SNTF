@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="Styles/style.css">
 <footer class="footer">
   <div class="footer-content">
     <!-- Column 1: Logo and Contact Info -->

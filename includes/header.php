@@ -1,7 +1,8 @@
+<link rel="stylesheet" href="Styles/style.css">
 <header class="header-sntf">
         <div class="navbar">
           <div class="logo">
-            <img src="images/SNTFlogo.png" alt="Logo de la SNTF" />
+            <a href="index.php"><img src="images/SNTFlogo.png" alt="Logo de la SNTF" /></a>
           </div>
           <nav class="navbar-links">
             <ul>
@@ -13,4 +14,4 @@
             </ul>
           </nav>
         </div>
-      </header>
+</header>
