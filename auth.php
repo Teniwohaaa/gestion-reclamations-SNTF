@@ -1,34 +1,44 @@
 <?php 
     session_start();
 
-    require_once 'database/db_connect.php';
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        $email = $_POST['email'];
-        $password = sha1($_POST['password']);
+    require 'database/db_connect.php';
 
-        $request = $conn->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
-        $request->execute([$email, $password]);
-        $user = $request->fetch();
-        
-    if($user){
-        $_SESSION['user'] = $user;
-        try {
-           if ($user['role'] === 'admin') {
-                header('Location: admin_dashboard.php');
-            } 
-            elseif ($user['role'] === 'agent') {
-                header("Location: agent_dashboard.php");
-            }
-            elseif ($user['role'] === 'user') {
-                header("Location: suivi_reclamation.php");
-            } 
-        } catch (Exception $th) {
-            // Gérer l'erreur de redirection
-            echo "Une erreur s'est produite lors de la redirection: " . $th->getMessage();
-            exit();
-        }
-    } else {
-        echo "Identifiants incorrects.";
+    if (isset($_SESSION['email'])) {
+        header("Location: index.php");
+        exit();
     }
-}    
+    
+    if (isset($_POST['submit'])) {
+        if (empty($_POST['email']) || empty($_POST['password'])) {
+            echo '<script>alert("Please fill in all fields!");</script>';
+        }
+        else {
+            $result = $conn->query("SELECT `id`, `name`, `email`, `password`, `role`, `created_at` FROM `users` WHERE $email");
+            if ($result->rowCount() > 0) {
+                $row = $result->fetch();
+    
+                if ($password == $row['password']) {
+                    $_SESSION['name'] = $row['name'];
+                    $_SESSION['email'] = $email;
+                    $_SESSION['password'] = $password;
+                    $_SESSION['id'] = $row['id'];
+                    $_SESSION['role'] = $row['role'];
+    
+                    if ($row['role'] == 'admin') {
+                        header("Location: admin.php");
+                    }
+                    elseif ($row['role'] == 'agent') {
+                        header("Location: agent.php");
+                    }
+                    else {
+                        header("Location: index.php");
+                    }
+                    }
+                }
+                else {
+                    echo '<script>alert("Incorrect password!");</script>';
+                }
+            }
+    }
+    
 ?>

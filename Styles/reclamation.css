@@ -269,3 +269,28 @@ select.form-control {
   font-size: 0.875rem;
   color: var(--text-rgb-75-85-99);
 }
+
+/* Auth Links */
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1.5rem 2rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.auth-links a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.auth-links a:hover {
+  color: var(--primary-light);
+  background-color: var(--bg-light);
+}

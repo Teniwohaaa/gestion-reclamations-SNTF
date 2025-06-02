@@ -14,7 +14,7 @@ CREATE TABLE reclamations (
     user_id INT,
     type VARCHAR(100),
     description TEXT,
-    piece_jointe VARCHAR(255), -- chemin vers le fichier si fourni
+    piece_jointe VARCHAR(255),
     statut ENUM('en_attente', 'en_cours', 'traitee', 'cloturee') DEFAULT 'en_attente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL,

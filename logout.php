@@ -5,4 +5,7 @@ session_start();
 session_unset();
 // Destroy the session
 session_destroy();
+// Add after session_destroy();
+header("Location: login.php");
+exit();
 ?>
