@@ -1,9 +1,4 @@
-<?php
-
-session_start();
-
-?>
-
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
 
@@ -19,7 +14,6 @@ session_start();
     <div class="node-1">
         <?php include 'includes/header.php'; ?>
 
-        <!-- Affichage des messages d'erreur -->
         <?php if (isset($_SESSION['error'])): ?>
         <div class="alert"
             style="background-color: #fee2e2; color: #dc2626; padding: 1rem; margin: 1rem auto; max-width: 600px; border-radius: 6px; text-align: center;">
@@ -72,7 +66,7 @@ session_start();
                         <h3 class="card-title">Besoin d'aide?</h3>
                     </div>
                     <p class="card-text">Si vous rencontrez des problèmes pour vous connecter, contactez notre service
-                        client au (213) 21 71 15 10 par email à contact@sntf.dz</p>
+                        client au 021 XX XX XX ou par email à support@sntf.dz</p>
                 </div>
             </div>
         </div>

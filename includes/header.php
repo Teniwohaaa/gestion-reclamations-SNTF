@@ -31,7 +31,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 .logo img {
-
     height: 30px;
     width: auto;
 }
@@ -65,7 +64,7 @@ if (session_status() === PHP_SESSION_NONE) {
     text-decoration: none;
 }
 
-/* User Actions - Updated to match new style */
+/* User Actions */
 .user-actions {
     display: flex;
     align-items: center;
@@ -102,9 +101,10 @@ if (session_status() === PHP_SESSION_NONE) {
     height: 20px;
 }
 
-/* Dropdown Styles - Updated */
+/* Dropdown Styles */
 .user-dropdown {
     position: relative;
+    display: inline-block;
 }
 
 .dropdown-content {
@@ -164,32 +164,32 @@ if (session_status() === PHP_SESSION_NONE) {
         </nav>
 
         <div class="user-actions">
-            <?php if (isset($_SESSION['name'])): ?>
+            <?php if (isset($_SESSION['user_id'])): ?>
             <div class="user-dropdown">
                 <button class="dropbtn">
                     <img src="images/user.png" alt="User" class="icon">
-                    <span><?php echo $_SESSION['name']; ?></span>
+                    <span><?php echo htmlspecialchars($_SESSION['name']); ?></span>
                 </button>
                 <div class="dropdown-content">
                     <?php if ($_SESSION['role'] === 'voyageur'): ?>
                     <a href="suivi_reclamation.php">
                         <img src="images/suiv-reclamation.png" alt="Suivi" class="icon">
-                        Suivi Reclamation
+                        Suivi Réclamation
                     </a>
                     <?php elseif ($_SESSION['role'] === 'agent'): ?>
-                    <a href="agents.php">
+                    <a href="agent.php">
                         <img src="images/agent.png" alt="Agent" class="icon">
-                        Mes Réservations
+                        Tableau de bord
                     </a>
-                    <?php else: ?>
+                    <?php elseif ($_SESSION['role'] === 'admin'): ?>
                     <a href="admin.php">
                         <img src="images/admin.png" alt="Admin" class="icon">
-                        Mes Réservations
+                        Administration
                     </a>
                     <?php endif; ?>
                     <a href="logout.php">
                         <img src="images/sign-out.png" alt="Logout" class="icon">
-                        Se déconnecter
+                        Déconnexion
                     </a>
                 </div>
             </div>

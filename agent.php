@@ -1,0 +1,826 @@
+<?php
+
+require 'database/db_connect.php';
+
+// Check if user is logged in and is an agent
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'agent') {
+    header("Location: login.php");
+    exit();
+}
+
+// Get agent's name for display
+$agent_name = $_SESSION['name'];
+
+// Get statistics for dashboard
+try {
+    // Total complaints
+    $stmt = $conn->prepare("SELECT COUNT(*) as total FROM reclamations");
+    $stmt->execute();
+    $total_complaints = $stmt->fetch()['total'];
+
+    // Pending complaints
+    $stmt = $conn->prepare("SELECT COUNT(*) as pending FROM reclamations WHERE statut = 'en_attente'");
+    $stmt->execute();
+    $pending_complaints = $stmt->fetch()['pending'];
+
+    // Resolved complaints
+    $stmt = $conn->prepare("SELECT COUNT(*) as resolved FROM reclamations WHERE statut = 'traitee'");
+    $stmt->execute();
+    $resolved_complaints = $stmt->fetch()['resolved'];
+
+    // In progress complaints
+    $stmt = $conn->prepare("SELECT COUNT(*) as in_progress FROM reclamations WHERE statut = 'en_cours'");
+    $stmt->execute();
+    $in_progress_complaints = $stmt->fetch()['in_progress'];
+} catch (PDOException $e) {
+    error_log("Error fetching statistics: " . $e->getMessage());
+    $total_complaints = $pending_complaints = $resolved_complaints = $in_progress_complaints = 0;
+}
+
+// Handle filters and get complaints
+$search = $_GET['search'] ?? '';
+$status = $_GET['status'] ?? '';
+$type = $_GET['type'] ?? '';
+
+$where = [];
+$params = [];
+
+if (!empty($search)) {
+    $where[] = "(r.id LIKE :search OR u.name LIKE :search OR u.email LIKE :search)";
+    $params[':search'] = "%$search%";
+}
+
+if (!empty($status) && in_array($status, ['en_attente', 'en_cours', 'traitee', 'cloturee'])) {
+    $where[] = "r.statut = :status";
+    $params[':status'] = $status;
+}
+
+if (!empty($type)) {
+    $where[] = "r.type = :type";
+    $params[':type'] = $type;
+}
+
+$where_clause = $where ? "WHERE " . implode(" AND ", $where) : "";
+
+try {
+    $stmt = $conn->prepare("
+        SELECT r.*, u.name as user_name, u.email as user_email 
+        FROM reclamations r
+        JOIN users u ON r.user_id = u.id
+        $where_clause
+        ORDER BY r.created_at DESC
+        LIMIT 10
+    ");
+    
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+    
+    $stmt->execute();
+    $complaints = $stmt->fetchAll();
+} catch (PDOException $e) {
+    error_log("Error fetching complaints: " . $e->getMessage());
+    $complaints = [];
+}
+
+//mis a jours du status
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && isset($_POST['status'])) {
+    $complaint_id = $_POST['complaint_id'];
+    $status = $_POST['status'];
+    $comment = $_POST['comment'] ?? '';
+    
+    try {
+        //mis a jour du statut de la réclamation
+        $stmt = $conn->prepare("UPDATE reclamations SET statut = ?, updated_at = NOW() WHERE id = ?");
+        $stmt->execute([$status, $complaint_id]);
+        
+        // ajout d'un commentaire si fourni
+        if (!empty($comment)) {
+            $stmt = $conn->prepare("INSERT INTO reclamation_comments (reclamation_id, user_id, commentaire) VALUES (?, ?, ?)");
+            $stmt->execute([$complaint_id, $_SESSION['user_id'], $comment]);
+        }
+        
+        $_SESSION['success'] = "Réclamation mise à jour avec succès";
+        header("Location: agent.php");
+        exit();
+    } catch (PDOException $e) {
+        error_log("Error updating complaint: " . $e->getMessage());
+        $_SESSION['error'] = "Erreur lors de la mise à jour de la réclamation";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Agent - SNTF</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
+    <style>
+    .agent-backend {
+        font-family: 'Montserrat', sans-serif;
+        background: #f9fafb;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header {
+        background: #184c7c;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        color: white;
+    }
+
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .avatar {
+        background: #ffffff;
+        border-radius: 16px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #184c7c;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .content-area {
+        display: flex;
+        flex: 1;
+    }
+
+    .sidebar {
+        width: 250px;
+        background: #f9fafb;
+        padding: 24px 16px;
+        border-right: 1px solid #e5e7eb;
+    }
+
+    .nav-item {
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        color: #4b5563;
+        text-decoration: none;
+    }
+
+    .nav-item.active {
+        background: #e0f0ff;
+        border: 1px solid #2b7cff;
+        color: #3a8cff;
+        font-weight: 600;
+    }
+
+    .nav-item:hover {
+        background: #f3f4f6;
+    }
+
+    .main-content {
+        flex: 1;
+        padding: 24px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .page-description {
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        padding: 16px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .card-label {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 4px;
+    }
+
+    .card-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .card-trend {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .trend-up {
+        color: #10b981;
+    }
+
+    .trend-down {
+        color: #ef4444;
+    }
+
+    .filters {
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        padding: 16px;
+        margin-bottom: 24px;
+    }
+
+    .filter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .filter-title {
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .filter-options {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-label {
+        font-size: 14px;
+        color: #4b5563;
+    }
+
+    .filter-input {
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 8px 12px;
+        width: 100%;
+    }
+
+    .complaints-table {
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-header,
+    .table-row {
+        display: grid;
+        grid-template-columns: 50px 120px 180px 140px 140px 140px 100px;
+        padding: 0 16px;
+        align-items: center;
+    }
+
+    .table-header {
+        background: #f9fafb;
+        height: 48px;
+        border-bottom: 1px solid #e5e7eb;
+        font-weight: 600;
+        font-size: 14px;
+        color: #4b5563;
+    }
+
+    .table-row {
+        height: 64px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .table-row:nth-child(even) {
+        background: #f9fafb;
+    }
+
+    .status-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-in-progress {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .status-resolved {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-closed {
+        background: #e5e7eb;
+        color: #4b5563;
+    }
+
+    .action-button {
+        background: #f3f4f6;
+        border-radius: 6px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .action-button:hover {
+        background: #e5e7eb;
+    }
+
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        background: white;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 8px;
+    }
+
+    .page-button {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .page-button.active {
+        background: #00529b;
+        color: white;
+    }
+
+    .page-button:not(.active) {
+        background: #f9fafb;
+        border: 1px solid #d1d5db;
+    }
+
+    /* styles du modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 8px;
+        width: 500px;
+        max-width: 90%;
+        padding: 24px;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .modal-title {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .close-button {
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: #00529b;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #f3f4f6;
+        color: #111827;
+    }
+
+    /* Alert messages */
+    .alert {
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 16px;
+    }
+
+    .alert-success {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .alert-error {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="agent-backend">
+        <div class="header">
+            <img class="image-1" src="images/SNTFlogo.png" alt="SNTF Logo" style="height: 45px;">
+            <div class="user-menu">
+                <div class="avatar">
+                    <div class="initials"><?= substr($agent_name, 0, 2) ?></div>
+                </div>
+                <div class="user-name"><?= htmlspecialchars($agent_name) ?></div>
+                <a href="logout.php" style="color: white; margin-left: 16px;">Déconnexion</a>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="sidebar">
+                <div class="navigation">
+                    <div class="menu-principal">MENU PRINCIPAL</div>
+                    <a href="agent.php" class="nav-item active">
+                        <span>Tableau de bord</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span>Comptes Voyageurs</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span>Réclamations</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <span>Rapports</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success"><?= $_SESSION['success']; unset($_SESSION['success']); ?></div>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-error"><?= $_SESSION['error']; unset($_SESSION['error']); ?></div>
+                <?php endif; ?>
+
+                <div class="page-header">
+                    <div class="left">
+                        <h1 class="page-title">Gestion des Réclamations</h1>
+                        <p class="page-description">Consultez et traitez les réclamations des clients</p>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-primary">Exporter</button>
+                    </div>
+                </div>
+
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="card-content">
+                            <div class="card-label">Total des réclamations</div>
+                            <div class="card-value"><?= $total_complaints ?></div>
+                            <div class="card-trend trend-up">
+                                +12% ce mois
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="card-content">
+                            <div class="card-label">En attente</div>
+                            <div class="card-value"><?= $pending_complaints ?></div>
+                            <div class="card-trend trend-down">
+                                -8% ce mois
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="card-content">
+                            <div class="card-label">En cours</div>
+                            <div class="card-value"><?= $in_progress_complaints ?></div>
+                            <div class="card-trend trend-up">
+                                +24% ce mois
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="card-content">
+                            <div class="card-label">Résolues</div>
+                            <div class="card-value"><?= $resolved_complaints ?></div>
+                            <div class="card-trend trend-up">
+                                +5% ce mois
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filters">
+                    <div class="filter-header">
+                        <div class="left2">
+                            <h3 class="filter-title">Filtres et recherche</h3>
+                        </div>
+                        <a href="agent.php" class="reset">Réinitialiser</a>
+                    </div>
+
+                    <form method="GET" class="filter-options">
+                        <div class="filter-group">
+                            <label class="filter-label">Recherche</label>
+                            <input type="text" name="search" class="filter-input" placeholder="Rechercher..."
+                                value="<?= htmlspecialchars($search) ?>">
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">Statut</label>
+                            <select name="status" class="filter-input">
+                                <option value="">Tous les statuts</option>
+                                <option value="en_attente" <?= $status === 'en_attente' ? 'selected' : '' ?>>En attente
+                                </option>
+                                <option value="en_cours" <?= $status === 'en_cours' ? 'selected' : '' ?>>En cours
+                                </option>
+                                <option value="traitee" <?= $status === 'traitee' ? 'selected' : '' ?>>Résolue</option>
+                                <option value="cloturee" <?= $status === 'cloturee' ? 'selected' : '' ?>>Clôturée
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">Type</label>
+                            <select name="type" class="filter-input">
+                                <option value="">Tous les types</option>
+                                <option value="retard" <?= $type === 'retard' ? 'selected' : '' ?>>Retard</option>
+                                <option value="proprete" <?= $type === 'proprete' ? 'selected' : '' ?>>Propreté</option>
+                                <option value="service" <?= $type === 'service' ? 'selected' : '' ?>>Service</option>
+                                <option value="autre" <?= $type === 'autre' ? 'selected' : '' ?>>Autre</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label class="filter-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary" style="height: 40px;">Filtrer</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="complaints-table">
+                    <div class="table-header">
+                        <div>#</div>
+                        <div>Référence</div>
+                        <div>Client</div>
+                        <div>Type</div>
+                        <div>Date</div>
+                        <div>Statut</div>
+                        <div>Actions</div>
+                    </div>
+
+                    <?php foreach ($complaints as $complaint): ?>
+                    <div class="table-row">
+                        <div><?= $complaint['id'] ?></div>
+                        <div>REC-<?= $complaint['id'] ?></div>
+                        <div>
+                            <div class="client-name"><?= htmlspecialchars($complaint['user_name']) ?></div>
+                            <div class="client-email"><?= htmlspecialchars($complaint['user_email']) ?></div>
+                        </div>
+                        <div>
+                            <?php 
+                                    $types = [
+                                        'retard' => 'Retard',
+                                        'proprete' => 'Propreté',
+                                        'service' => 'Service',
+                                        'autre' => 'Autre'
+                                    ];
+                                    echo $types[$complaint['type']] ?? $complaint['type'];
+                                ?>
+                        </div>
+                        <div><?= date('d/m/Y', strtotime($complaint['created_at'])) ?></div>
+                        <div>
+                            <?php
+                                    $status_classes = [
+                                        'en_attente' => 'status-pending',
+                                        'en_cours' => 'status-in-progress',
+                                        'traitee' => 'status-resolved',
+                                        'cloturee' => 'status-closed'
+                                    ];
+                                    $status_texts = [
+                                        'en_attente' => 'En attente',
+                                        'en_cours' => 'En cours',
+                                        'traitee' => 'Résolue',
+                                        'cloturee' => 'Clôturée'
+                                    ];
+                                ?>
+                            <span class="status-badge <?= $status_classes[$complaint['statut']] ?>">
+                                <?= $status_texts[$complaint['statut']] ?>
+                            </span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="action-button view-btn" data-id="<?= $complaint['id'] ?>">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                            <button class="action-button edit-btn" data-id="<?= $complaint['id'] ?>">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+
+                    <div class="table-footer">
+                        <div class="pagination">
+                            <button class="page-button">&lt;</button>
+                            <button class="page-button active">1</button>
+                            <button class="page-button">2</button>
+                            <button class="page-button">3</button>
+                            <button class="page-button">&gt;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complaint Modal -->
+    <div id="complaintModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Détails de la réclamation</h3>
+                <span class="close-button">&times;</span>
+            </div>
+            <div id="modalBody">
+                <!-- Content will be loaded via AJAX -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Modifier la réclamation</h3>
+                <span class="close-button">&times;</span>
+            </div>
+            <form id="editForm" method="POST">
+                <input type="hidden" name="complaint_id" id="editComplaintId">
+
+                <div class="form-group">
+                    <label class="form-label">Statut</label>
+                    <select name="status" class="form-control" id="editStatus">
+                        <option value="en_attente">En attente</option>
+                        <option value="en_cours">En cours</option>
+                        <option value="traitee">Résolue</option>
+                        <option value="cloturee">Clôturée</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Commentaire</label>
+                    <textarea name="comment" class="form-control" rows="4"
+                        placeholder="Ajouter un commentaire..."></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                    <button type="button" class="btn btn-secondary close-edit-btn">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    // Modal functionality
+    const modal = document.getElementById('complaintModal');
+    const editModal = document.getElementById('editModal');
+    const modalBody = document.getElementById('modalBody');
+    const closeButtons = document.querySelectorAll('.close-button, .close-edit-btn');
+    const viewButtons = document.querySelectorAll('.view-btn');
+    const editButtons = document.querySelectorAll('.edit-btn');
+
+    // Open complaint modal
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const complaintId = this.getAttribute('data-id');
+
+            // Load complaint details via AJAX
+            fetch(`get_complaint_details.php?id=${complaintId}`)
+                .then(response => response.text())
+                .then(data => {
+                    modalBody.innerHTML = data;
+                    modal.style.display = 'flex';
+                });
+        });
+    });
+
+    // Open edit modal
+    editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const complaintId = this.getAttribute('data-id');
+            document.getElementById('editComplaintId').value = complaintId;
+            editModal.style.display = 'flex';
+        });
+    });
+
+    // Close modals
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            modal.style.display = 'none';
+            editModal.style.display = 'none';
+        });
+    });
+
+    // Close when clicking outside modal
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+        if (event.target === editModal) {
+            editModal.style.display = 'none';
+        }
+    });
+    </script>
+</body>
+
+</html>

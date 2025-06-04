@@ -1,0 +1,90 @@
+.agent-dashboard {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+  background: var(--bg-light);
+}
+
+.sidebar {
+  background: var(--white);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.agent-info {
+  text-align: center;
+}
+
+.agent-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 auto 1rem;
+}
+
+.agent-name {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 0.25rem;
+}
+
+.agent-role {
+  font-size: 0.875rem;
+  color: var(--text-medium);
+}
+
+.agent-nav {
+  padding: 2rem;
+  flex: 1;
+}
+
+.nav-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-medium);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agent-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.agent-nav li a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-dark);
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.agent-nav li.active a {
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Add more styles as needed */
