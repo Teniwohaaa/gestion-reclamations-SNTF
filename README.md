@@ -18,7 +18,7 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 # Comment utiliser ce site:
 ### Voyageurs
 1. Accédez au site via votre navigateur (URL à compléter).
-2. Créez un compte ou connectez-vous.
+2. Rempliser une reclamation ou connectez-vous.
 3. Soumettez une réclamation :
    - Sélectionnez le type de problème (retard, comportement du personnel, propreté, etc.).
    - Décrivez les faits de manière claire et précise.
