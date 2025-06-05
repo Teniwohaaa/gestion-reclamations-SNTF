@@ -43,7 +43,7 @@ if (session_status() === PHP_SESSION_NONE) {
                         Tableau de bord
                     </a>
                     <?php elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                    <a href="admin.php">
+                    <a href="admin.html">
                         <img src="images/admin.png" alt="Admin" class="icon">
                         Administration
                     </a>

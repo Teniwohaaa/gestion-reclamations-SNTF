@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'database/db_connect.php';
 
 // Check if user is logged in and is an agent
@@ -118,9 +117,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && is
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Agent - SNTF</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="Styles/images/style.css">
-    <link rel="stylesheet" href="Styles/images/header.css">
-    <link rel="stylesheet" href="Styles/images/agent.css">
+    <link rel="stylesheet" href="Styles/style.css">
+    <link rel="stylesheet" href="Styles/header.css">
+    <link rel="stylesheet" href="Styles/agent.css">
 </head>
 
 <body>
@@ -140,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && is
                     </button>
                     <div class="dropdown-content">
                         <a href="index.php">
-                            <img src="images/home.png" alt="Home" class="icon" />
+                            <img src="images/dasboard/acceuil.png" alt="Home" class="icon" />
                             Accueil
                         </a>
                         <a href="logout.php">

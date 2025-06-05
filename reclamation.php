@@ -126,8 +126,6 @@ if(isset($_POST['submit'])){
         <div class="content-14">
             <form class="form-container-15" action="reclamation.php" method="post" id="complaintForm"
                 enctype="multipart/form-data">
-                enctype="multipart/form-data">
-                enctype="multipart/form-data">
                 <h2>Soumettre une réclamation</h2>
 
                 <?php if (!isset($_SESSION['user_id'])): ?>
@@ -162,9 +160,9 @@ if(isset($_POST['submit'])){
                     </div>
                 </div>
                 <?php else: ?>
-                <input type="hidden" name="email" value="<?= htmlspecialchars($_SESSION['user']['email']) ?>">
+                <input type="hidden" name="email" value="<?= htmlspecialchars($_SESSION['email']) ?>">
                 <p class="logged-in-message">Vous êtes connecté en tant que
-                    <?= htmlspecialchars($_SESSION['user']['name']) ?></p>
+                    <?= htmlspecialchars($_SESSION['name']) ?></p>
                 <?php endif; ?>
 
                 <div class="form-section">
