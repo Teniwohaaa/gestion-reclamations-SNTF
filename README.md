@@ -33,7 +33,19 @@ Base de données utilisée : sntf_reclamations
 - Tests fonctionnels : 
 
 # Documentation :
-Lien vers la documentation technique : https://linktodocumentation
+Lien vers la documentation technique : 
+
+# Importer la base de données:
+1. Aller sur [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+2. Cliquer sur **"Nouvelle base de données"** dans le menu de gauche.
+3. Entrer un nom pour la base (ex: `sntf_reclamations`) et cliquer sur **"Créer"**.
+4. Une fois la base créée, cliquer sur l’onglet **"Importer"**.
+5. Cliquer sur **"Choisir un fichier"** et sélectionner le fichier `sntf_reclamations.sql`.
+6. Cliquer sur **"Exécuter"** pour lancer l'importation.
+
+### 📝 Remarques
+- Si une base de données du même nom existe déjà, vous pouvez la supprimer avant de réimporter.
+- Cette méthode fonctionne sous XAMPP, WAMP, MAMP, ou tout serveur local utilisant phpMyAdmin.
 
 # Auteur :
 Ce projet a été réalisé dans le cadre d’un exercice académique.
