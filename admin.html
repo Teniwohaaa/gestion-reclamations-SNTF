@@ -4,237 +4,260 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin - SNTF</title>
-    <link rel="stylesheet" href="Styles/admin.css" />
     <link rel="stylesheet" href="Styles/style.css" />
+    <link rel="stylesheet" href="Styles/admin.css" />
+    <link rel="stylesheet" href="Styles/header.css" />
   </head>
+
   <body>
-    <div class="admin-dashboard">
-      <div class="sidebar">
-        <div class="navigation">
-          <div class="menu-principal">MENU PRINCIPAL</div>
-          <div class="nav-item-dashboard">
-            <img class="frame" src="frame0.svg" />
-            <div class="tableau-de-bord">Tableau de bord</div>
-          </div>
-          <div class="nav-item-agents">
-            <img class="frame2" src="frame1.svg" />
-            <div class="comptes-agents">Comptes Agents</div>
-          </div>
-          <div class="nav-item-voyageurs">
-            <img class="frame3" src="frame2.svg" />
-            <div class="comptes-voyageurs">Comptes Voyageurs</div>
-          </div>
-          <div class="nav-item-stats">
-            <img class="frame4" src="frame3.svg" />
-            <div class="statistiques">Statistiques</div>
-          </div>
-          <div class="nav-item-r-clamations">
-            <img class="frame5" src="frame4.svg" />
-            <div class="r-clamations">Réclamations</div>
+    <header class="header-sntf">
+      <div class="navbar">
+        <div class="logo">
+          <a href="index.php">
+            <img src="images/SNTFlogo.png" alt="SNTF Logo" />
+          </a>
+        </div>
+
+        <div class="user-actions">
+          <div class="user-dropdown">
+            <button class="dropbtn">
+              <img src="images/user.png" alt="User" class="icon" />
+              <span>Admin</span>
+            </button>
+            <div class="dropdown-content">
+              <a href="index.php">
+                <img src="images/home.png" alt="Home" class="icon" />
+                Accueil
+              </a>
+              <a href="logout.php">
+                <img src="images/sign-out.png" alt="Logout" class="icon" />
+                Déconnexion
+              </a>
+            </div>
           </div>
         </div>
       </div>
-      <div class="main-content">
-        <div class="header">
-          <div class="tableau-de-bord2">Tableau de bord</div>
-          <div class="search">
-            <img class="frame6" src="images/admin/lupa.png" />
-            <div class="rechercher">Rechercher...</div>
+    </header>
+
+    <div class="admin-dashboard">
+      <div class="sidebar">
+        <div class="navigation">
+          <div class="menu-title">MENU PRINCIPAL</div>
+          <div class="nav-item active">
+            <img src="frame0.svg" alt="Dashboard" />
+            <span>Tableau de bord</span>
+          </div>
+          <div class="nav-item">
+            <img src="frame1.svg" alt="Agents" />
+            <span>Comptes Agents</span>
+          </div>
+          <div class="nav-item">
+            <img src="frame2.svg" alt="Voyageurs" />
+            <span>Comptes Voyageurs</span>
+          </div>
+          <div class="nav-item">
+            <img src="frame3.svg" alt="Stats" />
+            <span>Statistiques</span>
+          </div>
+          <div class="nav-item">
+            <img src="frame4.svg" alt="Claims" />
+            <span>Réclamations</span>
           </div>
         </div>
+      </div>
+
+      <div class="main-content">
+        <div class="header">
+          <h1>Tableau de bord</h1>
+          <div class="search-box">
+            <img src="images/admin/lupa.png" alt="Search" />
+            <input type="text" placeholder="Rechercher..." />
+          </div>
+        </div>
+
         <div class="dashboard-content">
           <div class="stats-cards">
-            <div class="card-r-clamations">
-              <div class="frame7">
-                <div class="total-r-clamations">Total Réclamations</div>
-                <div class="_1-248">1,248</div>
-                <div class="frame8">
-                  <img class="frame9" src="images/admin/arrow-up.png" />
-                  <div class="_12-5">+12.5%</div>
+            <div class="stat-card">
+              <div class="stat-info">
+                <div class="stat-title">Total Réclamations</div>
+                <div class="stat-value">1,248</div>
+                <div class="stat-change positive">
+                  <img src="images/admin/arrow-up.png" alt="Increase" />
+                  <span>+12.5%</span>
                 </div>
               </div>
-              <div class="frame10">
-                <img class="frame11" src="images/admin/message.png" />
+              <div class="stat-icon">
+                <img src="images/admin/message.png" alt="Claims" />
               </div>
             </div>
-            <div class="card-agents">
-              <div class="frame7">
-                <div class="comptes-agents2">Comptes Agents</div>
-                <div class="_84">84</div>
-                <div class="frame8">
-                  <img class="frame12" src="images/admin/arrow-up.png" />
-                  <div class="_4-2">+4.2%</div>
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <div class="stat-title">Comptes Agents</div>
+                <div class="stat-value">84</div>
+                <div class="stat-change positive">
+                  <img src="images/admin/arrow-up.png" alt="Increase" />
+                  <span>+4.2%</span>
                 </div>
               </div>
-              <div class="frame10">
-                <img class="frame13" src="images/admin/user.png" />
+              <div class="stat-icon">
+                <img src="images/admin/user.png" alt="Agents" />
               </div>
             </div>
-            <div class="card-voyageurs">
-              <div class="frame7">
-                <div class="comptes-voyageurs2">Comptes Voyageurs</div>
-                <div class="_3-642">3,642</div>
-                <div class="frame8">
-                  <img class="frame14" src="images/admin/arrow-up.png" />
-                  <div class="_18-7">+18.7%</div>
+
+            <div class="stat-card">
+              <div class="stat-info">
+                <div class="stat-title">Comptes Voyageurs</div>
+                <div class="stat-value">3,642</div>
+                <div class="stat-change positive">
+                  <img src="images/admin/arrow-up.png" alt="Increase" />
+                  <span>+18.7%</span>
                 </div>
               </div>
-              <div class="frame10">
-                <img class="frame15" src="images/admin/voyageurs.png" />
+              <div class="stat-icon">
+                <img src="images/admin/voyageurs.png" alt="Travelers" />
               </div>
             </div>
           </div>
-          <div class="main-sections">
-            <div class="left-column">
-              <div class="r-clamations-r-centes">
-                <div class="frame16">
-                  <div class="r-clamations-r-centes2">
-                    Réclamations récentes
-                  </div>
-                  <div class="button">
-                    <div class="voir-tout">Voir tout</div>
-                  </div>
-                </div>
+
+          <div class="dashboard-grid">
+            <div class="recent-claims">
+              <div class="section-header">
+                <h2>Réclamations récentes</h2>
+                <button class="view-all">Voir tout</button>
+              </div>
+
+              <div class="claims-table">
                 <div class="table-header">
-                  <div class="id">ID</div>
-                  <div class="voyageur">Voyageur</div>
-                  <div class="date">Date</div>
-                  <div class="statut">Statut</div>
-                  <div class="type">Type</div>
+                  <div class="col-id">ID</div>
+                  <div class="col-user">Voyageur</div>
+                  <div class="col-date">Date</div>
+                  <div class="col-status">Statut</div>
+                  <div class="col-type">Type</div>
                 </div>
-                <div class="table-row-1">
-                  <div class="_421">#421</div>
-                  <div class="frame17">
-                    <div class="frame18">
-                      <div class="km">KM</div>
-                    </div>
-                    <div class="karim-meziane">Karim Meziane</div>
+
+                <div class="table-row">
+                  <div class="col-id">#421</div>
+                  <div class="col-user">
+                    <div class="user-avatar">KM</div>
+                    <span>Karim Meziane</span>
                   </div>
-                  <div class="_12-05-2023">12/05/2023</div>
-                  <div class="frame19">
-                    <div class="en-cours">En cours</div>
-                  </div>
-                  <div class="retard-train">Retard train</div>
+                  <div class="col-date">12/05/2023</div>
+                  <div class="col-status status-in-progress">En cours</div>
+                  <div class="col-type">Retard train</div>
                 </div>
-                <div class="table-row-2">
-                  <div class="_420">#420</div>
-                  <div class="frame17">
-                    <div class="frame18">
-                      <div class="sb">SB</div>
-                    </div>
-                    <div class="sarah-benali">Sarah Benali</div>
+
+                <div class="table-row">
+                  <div class="col-id">#420</div>
+                  <div class="col-user">
+                    <div class="user-avatar">SB</div>
+                    <span>Sarah Benali</span>
                   </div>
-                  <div class="_11-05-2023">11/05/2023</div>
-                  <div class="frame20">
-                    <div class="r-solu">Résolu</div>
-                  </div>
-                  <div class="remboursement">Remboursement</div>
+                  <div class="col-date">11/05/2023</div>
+                  <div class="col-status status-resolved">Résolu</div>
+                  <div class="col-type">Remboursement</div>
                 </div>
-                <div class="table-row-3">
-                  <div class="_419">#419</div>
-                  <div class="frame17">
-                    <div class="frame18">
-                      <div class="ha">HA</div>
-                    </div>
-                    <div class="hamid-amrani">Hamid Amrani</div>
+
+                <div class="table-row">
+                  <div class="col-id">#419</div>
+                  <div class="col-user">
+                    <div class="user-avatar">HA</div>
+                    <span>Hamid Amrani</span>
                   </div>
-                  <div class="_10-05-2023">10/05/2023</div>
-                  <div class="frame21">
-                    <div class="rejet">Rejeté</div>
-                  </div>
-                  <div class="confort">Confort</div>
+                  <div class="col-date">10/05/2023</div>
+                  <div class="col-status status-rejected">Rejeté</div>
+                  <div class="col-type">Confort</div>
                 </div>
-                <div class="table-row-4">
-                  <div class="_418">#418</div>
-                  <div class="frame17">
-                    <div class="frame18">
-                      <div class="lk">LK</div>
-                    </div>
-                    <div class="leila-kadi">Leila Kadi</div>
+
+                <div class="table-row">
+                  <div class="col-id">#418</div>
+                  <div class="col-user">
+                    <div class="user-avatar">LK</div>
+                    <span>Leila Kadi</span>
                   </div>
-                  <div class="_09-05-2023">09/05/2023</div>
-                  <div class="frame20">
-                    <div class="r-solu">Résolu</div>
-                  </div>
-                  <div class="bagage-perdu">Bagage perdu</div>
+                  <div class="col-date">09/05/2023</div>
+                  <div class="col-status status-resolved">Résolu</div>
+                  <div class="col-type">Bagage perdu</div>
                 </div>
               </div>
             </div>
-            <div class="right-column">
-              <div class="statistiques2">
-                <div class="statistiques3">Statistiques</div>
-                <div class="chart">
-                  <img class="frame22" src="images/diagrame.png" />
+
+            <div class="right-sidebar">
+              <div class="stats-section">
+                <h2>Statistiques</h2>
+                <div class="chart-container">
+                  <img src="images/diagrame.png" alt="Chart" />
                 </div>
+
                 <div class="stats-list">
                   <div class="stat-item">
-                    <div class="frame7">
-                      <div class="r-clamations-ce-mois">
-                        Réclamations ce mois
-                      </div>
-                      <div class="_248">248</div>
+                    <div class="stat-text">
+                      <div class="stat-label">Réclamations ce mois</div>
+                      <div class="stat-number">248</div>
                     </div>
-                    <div class="frame8">
-                      <img class="frame23" src="images/admin/arrow-up.png" />
-                      <div class="_12-5">+12.5%</div>
+                    <div class="stat-change positive">
+                      <img src="images/admin/arrow-up.png" alt="Increase" />
+                      <span>+12.5%</span>
                     </div>
                   </div>
+
                   <div class="stat-item">
-                    <div class="frame7">
-                      <div class="taux-de-r-solution">Taux de résolution</div>
-                      <div class="_78">78%</div>
+                    <div class="stat-text">
+                      <div class="stat-label">Taux de résolution</div>
+                      <div class="stat-number">78%</div>
                     </div>
-                    <div class="frame8">
-                      <img class="frame24" src="images/admin/arrow-up.png" />
-                      <div class="_4-2">+4.2%</div>
+                    <div class="stat-change positive">
+                      <img src="images/admin/arrow-up.png" alt="Increase" />
+                      <span>+4.2%</span>
                     </div>
                   </div>
+
                   <div class="stat-item">
-                    <div class="frame7">
-                      <div class="temps-moyen-de-r-solution">
-                        Temps moyen de résolution
-                      </div>
-                      <div class="_3-2-jours">3.2 jours</div>
+                    <div class="stat-text">
+                      <div class="stat-label">Temps moyen de résolution</div>
+                      <div class="stat-number">3.2 jours</div>
                     </div>
-                    <div class="frame8">
-                      <img class="frame25" src="images/admin/arrow-down.png" />
-                      <div class="_0-5-jour">+0.5 jour</div>
+                    <div class="stat-change negative">
+                      <img src="images/admin/arrow-down.png" alt="Decrease" />
+                      <span>+0.5 jour</span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="activit-r-cente">
-                <div class="activit-r-cente2">Activité récente</div>
+
+              <div class="recent-activity">
+                <h2>Activité récente</h2>
+
                 <div class="activity-list">
                   <div class="activity-item">
-                    <div class="frame26">
-                      <img class="frame27" src="images/admin/cube.png" />
+                    <div class="activity-icon blue">
+                      <img src="images/admin/cube.png" alt="Activity" />
                     </div>
-                    <div class="frame28">
-                      <div class="nouvelle-r-clamation-cr-e">
+                    <div class="activity-details">
+                      <div class="activity-title">
                         Nouvelle réclamation créée
                       </div>
-                      <div class="il-y-a-10-minutes">Il y a 10 minutes</div>
+                      <div class="activity-time">Il y a 10 minutes</div>
                     </div>
                   </div>
+
                   <div class="activity-item">
-                    <div class="frame29">
-                      <img class="frame30" src="images/admin/check.png" />
+                    <div class="activity-icon green">
+                      <img src="images/admin/check.png" alt="Resolved" />
                     </div>
-                    <div class="frame28">
-                      <div class="r-clamation-415-r-solue">
-                        Réclamation #415 résolue
-                      </div>
-                      <div class="il-y-a-45-minutes">Il y a 45 minutes</div>
+                    <div class="activity-details">
+                      <div class="activity-title">Réclamation #415 résolue</div>
+                      <div class="activity-time">Il y a 45 minutes</div>
                     </div>
                   </div>
+
                   <div class="activity-item">
-                    <div class="frame31">
-                      <img class="frame32" src="images/admin/triangle.png" />
+                    <div class="activity-icon yellow">
+                      <img src="images/admin/triangle.png" alt="Agent" />
                     </div>
-                    <div class="frame28">
-                      <div class="nouvel-agent-ajout">Nouvel agent ajouté</div>
-                      <div class="il-y-a-2-heures">Il y a 2 heures</div>
+                    <div class="activity-details">
+                      <div class="activity-title">Nouvel agent ajouté</div>
+                      <div class="activity-time">Il y a 2 heures</div>
                     </div>
                   </div>
                 </div>

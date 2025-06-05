@@ -10,7 +10,9 @@
 
 <body>
     <div class="sntf-homepage">
-        <?php include 'includes/header.php';?>
+        <?php 
+        session_start();
+        include 'includes/header.php';?>
 
         <section class="hero">
             <img src="images/Heroimg.jpg" alt="Train SNTF" class="hero-image" />

@@ -73,7 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $stmt = $conn->prepare("INSERT INTO reclamations (user_id, type, description, piece_jointe) VALUES (?, ?, ?, ?)");
         $stmt->execute([$user_id, $complaintType, $description, $piece_jointe]);
-        
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['name'] = $name;
+            $_SESSION['email'] = $email;
+        }
         $_SESSION['success'] = "Votre réclamation a été soumise avec succès! Numéro de référence: " . $conn->lastInsertId();
         header("Location: suivi_reclamation.php");
         exit();
