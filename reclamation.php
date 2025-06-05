@@ -1,6 +1,108 @@
 <?php
 session_start();
-  require 'database/db_connect.php';
+require 'database/db_connect.php';
+
+if(isset($_POST['submit'])){
+    if (isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['email']) && isset($_POST['phone']) && 
+        isset($_POST['tripDate']) && isset($_POST['trainNumber']) && isset($_POST['departure']) && 
+        isset($_POST['arrival']) && isset($_POST['complaintType']) && isset($_POST['description'])) {
+        
+        // Sanitize inputs
+        $firstName = htmlspecialchars(trim($_POST['firstName']));
+        $lastName = htmlspecialchars(trim($_POST['lastName']));
+        $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+        $phone = htmlspecialchars(trim($_POST['phone']));
+        $tripDate = $_POST['tripDate'];
+        $trainNumber = htmlspecialchars(trim($_POST['trainNumber']));
+        $departure = htmlspecialchars(trim($_POST['departure']));
+        $arrival = htmlspecialchars(trim($_POST['arrival']));
+        $complaintType = htmlspecialchars(trim($_POST['complaintType']));
+        $description = htmlspecialchars(trim($_POST['description']));
+        
+        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+        $pieceJointe = null;
+
+        // Handle file upload
+        if (!empty($_FILES['fileUpload']['name'])) {
+            $uploadDir = 'uploads/reclamations/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+            
+            $fileName = time() . '_' . basename($_FILES['fileUpload']['name']);
+            $targetPath = $uploadDir . $fileName;
+            
+            if (move_uploaded_file($_FILES['fileUpload']['tmp_name'], $targetPath)) {
+                $pieceJointe = $targetPath;
+            }
+        }
+
+        if ($userId === null) {
+            // For non-logged-in users
+            if (empty($firstName) || empty($lastName) || empty($email) || empty($tripDate) || 
+                empty($trainNumber) || empty($departure) || empty($arrival) || 
+                empty($complaintType) || empty($description)) {
+                echo "Veuillez remplir tous les champs requis.";
+                exit;
+            }
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo "L'adresse email n'est pas valide.";
+                exit;
+            }
+
+            // Check if email exists
+            $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            if ($stmt->rowCount() > 0) {
+                $userId = $stmt->fetchColumn();
+            } else {
+                // Create new user with default password
+                try {
+                    $hashedPassword = password_hash('default_password', PASSWORD_DEFAULT);
+                    $sql = "INSERT INTO users (name, email, password, phone, role) VALUES (?, ?, ?, ?, 'voyageur')";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute([$firstName.' '.$lastName, $email, $hashedPassword, $phone]);
+                    $userId = $conn->lastInsertId();
+                } catch (PDOException $e) {
+                    echo "Erreur lors de l'enregistrement de l'utilisateur: " . $e->getMessage();
+                    exit;
+                }
+                
+                // Create session for new user
+                $_SESSION['user_id'] = $userId;
+                $_SESSION['name'] = $firstName . ' ' . $lastName;
+                $_SESSION['email'] = $email;
+                $_SESSION['role'] = 'voyageur';
+                $_SESSION['phone'] = $phone;
+            }
+        }
+
+        try {
+            if ($userId) {
+                $sql = "INSERT INTO reclamations (user_id, trip_date, train_number, departure, arrival, type, description, piece_jointe) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([$userId, $tripDate, $trainNumber, $departure, $arrival, $complaintType, $description, $pieceJointe]);
+            } else {
+                $sql = "INSERT INTO reclamations (trip_date, train_number, departure, arrival, type, description, piece_jointe) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([$tripDate, $trainNumber, $departure, $arrival, $complaintType, $description, $pieceJointe]);
+            }
+            
+            // Get the reclamation ID for redirection
+            $reclamationId = $conn->lastInsertId();
+            $_SESSION['last_reclamation_id'] = $reclamationId;
+            
+            header("Location: suivi_reclamation.php?id=" . $reclamationId);
+            exit;
+        } catch (PDOException $e) {
+            echo "Erreur lors de l'enregistrement de la réclamation: " . $e->getMessage();
+            exit;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -22,11 +124,13 @@ session_start();
         </div>
 
         <div class="content-14">
-            <form class="form-container-15" action="process_reclamation.php" method="post" id="complaintForm"
+            <form class="form-container-15" action="reclamation.php" method="post" id="complaintForm"
+                enctype="multipart/form-data">
+                enctype="multipart/form-data">
                 enctype="multipart/form-data">
                 <h2>Soumettre une réclamation</h2>
 
-                <?php if (!isset($_SESSION['user'])): ?>
+                <?php if (!isset($_SESSION['user_id'])): ?>
                 <div class="form-section">
                     <h3>Informations personnelles</h3>
 
@@ -121,7 +225,7 @@ session_start();
                 </div>
 
                 <div class="submit-btn">
-                    <button type="submit" class="btn-primary">Soumettre</button>
+                    <button type="submit" name="submit" class="btn-primary">Soumettre</button>
                 </div>
             </form>
 
@@ -140,57 +244,13 @@ session_start();
                         <div class="card-icon">?</div>
                         <h3 class="card-title">Besoin d'aide?</h3>
                     </div>
-                    <p class="card-text">Notre service client est disponible au 021 XX XX XX ou par email à
-                        support@sntf.dz</p>
+                    <p class="card-text">Notre service client est disponible au (213) 21 71 15 10 ou par email à
+                        contact@sntf.dz</p>
                 </div>
             </div>
         </div>
     </div>
     <?php include 'includes/footer.php'; ?>
-    <script>
-    // Only show the success message if it's not coming from a redirect
-    if (!window.location.search.includes('success')) {
-        document.getElementById('complaintForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Client-side validation
-            if (this.checkValidity()) {
-                this.submit();
-            } else {
-                alert('Veuillez remplir tous les champs obligatoires.');
-            }
-        });
-    }
-
-    // Handle file upload display
-    const fileUpload = document.getElementById('fileUpload');
-    const fileUploadLabel = fileUpload.parentElement;
-
-    fileUpload.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            fileUploadLabel.querySelector('p').textContent = `${this.files.length} fichier(s) sélectionné(s)`;
-        }
-    });
-
-    // Handle drag and drop
-    fileUploadLabel.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileUploadLabel.style.borderColor = 'var(--text-rgb-0-82-155)';
-        fileUploadLabel.style.backgroundColor = 'rgba(0, 82, 155, 0.05)';
-    });
-
-    fileUploadLabel.addEventListener('dragleave', () => {
-        fileUploadLabel.style.borderColor = 'var(--border-light)';
-        fileUploadLabel.style.backgroundColor = 'var(--bg-light-gray)';
-    });
-
-    fileUploadLabel.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileUploadLabel.style.borderColor = 'var(--border-light)';
-        fileUploadLabel.style.backgroundColor = 'var(--bg-light-gray)';
-        fileUpload.files = e.dataTransfer.files;
-        fileUpload.dispatchEvent(new Event('change'));
-    });
-    </script>
 </body>
 
 </html>

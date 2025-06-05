@@ -1,35 +1,44 @@
-<link rel="stylesheet" href="Styles/style.css">
+<!DOCTYPE html>
+<html lang="fr">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi reclamations</title>
+
 <link rel="stylesheet" href="Styles/suivireclamation.css">
 
 <?php
 session_start();
- include 'includes/header.php'; ?>
+include 'includes/header.php'; 
+?>
 
 <div class="complaint-tracking">
     <div class="hero-section">
-        <div class="container">
+        <div class="tracking-container">
             <h1>Suivi de Réclamation</h1>
             <p>Consultez l'état de votre réclamation et les notifications</p>
         </div>
     </div>
 
-    <div class="container main-content">
-        <div class="search-section card">
-            <h2>Rechercher votre réclamation</h2>
-            <p class="description">Entrez votre numéro de référence pour suivre l'état de votre réclamation</p>
+    <div class="tracking-container">
+        <div class="search-section complaint-card">
+            <div class="complaint-card-header">
+                <h2 class="complaint-card-title">Rechercher votre réclamation</h2>
+            </div>
+            <p class="complaint-description">Entrez votre numéro de référence pour suivre l'état de votre réclamation
+            </p>
 
             <form class="search-form">
                 <div class="form-group">
-                    <label for="reference">Numéro de référence</label>
-                    <input type="text" id="reference" placeholder="Ex: REC-2023-12345">
+                    <label for="reference" class="form-label">Numéro de référence</label>
+                    <input type="text" id="reference" class="form-control" placeholder="Ex: REC-2023-12345">
                 </div>
-                <button type="submit" class="btn primary">Rechercher</button>
+                <button type="submit" class="submit-button">Rechercher</button>
             </form>
         </div>
 
-        <div class="complaint-details card">
-            <div class="header">
-                <h2>Détails de la réclamation</h2>
+        <div class="complaint-details complaint-card">
+            <div class="complaint-card-header">
+                <h2 class="complaint-card-title">Détails de la réclamation</h2>
                 <span class="status-badge">En traitement</span>
             </div>
 
@@ -49,69 +58,88 @@ session_start();
             </div>
 
             <div class="progress-tracker">
-                <h3>Progression de votre réclamation</h3>
+                <h3 class="progress-title">Progression de votre réclamation</h3>
 
-                <div class="timeline">
-                    <div class="step completed">
-                        <div class="step-marker">
-                            <svg class="check-icon" viewBox="0 0 24 24">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                            </svg>
+                <div class="progress-steps">
+                    <div class="step">
+                        <div class="step-indicator">
+                            <div class="circle completed">
+                                <svg class="check-icon" viewBox="0 0 24 24" width="16" height="16">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div class="line"></div>
                         </div>
                         <div class="step-content">
-                            <h4>Réclamation soumise</h4>
-                            <span class="date">15/11/2023 à 14:32</span>
-                            <p>Votre réclamation a été reçue et enregistrée dans notre système.</p>
-                        </div>
-                    </div>
-
-                    <div class="step completed">
-                        <div class="step-marker">
-                            <svg class="check-icon" viewBox="0 0 24 24">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                            </svg>
-                        </div>
-                        <div class="step-content">
-                            <h4>En cours d'analyse</h4>
-                            <span class="date">16/11/2023 à 09:15</span>
-                            <p>Votre réclamation est en cours d'analyse par notre service client.</p>
-                        </div>
-                    </div>
-
-                    <div class="step active">
-                        <div class="step-marker">3</div>
-                        <div class="step-content">
-                            <h4>Examen approfondi</h4>
-                            <span class="date">En attente</span>
-                            <p>Votre réclamation sera examinée par le service concerné.</p>
+                            <h4 class="step-title">Réclamation soumise</h4>
+                            <span class="step-date">15/11/2023 à 14:32</span>
+                            <p class="step-description">Votre réclamation a été reçue et enregistrée dans notre système.
+                            </p>
                         </div>
                     </div>
 
                     <div class="step">
-                        <div class="step-marker">4</div>
+                        <div class="step-indicator">
+                            <div class="circle completed">
+                                <svg class="check-icon" viewBox="0 0 24 24" width="16" height="16">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+                                        fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div class="line"></div>
+                        </div>
                         <div class="step-content">
-                            <h4>Résolution</h4>
-                            <span class="date">En attente</span>
-                            <p>Votre réclamation sera résolue et une réponse vous sera communiquée.</p>
+                            <h4 class="step-title">En cours d'analyse</h4>
+                            <span class="step-date">16/11/2023 à 09:15</span>
+                            <p class="step-description">Votre réclamation est en cours d'analyse par notre service
+                                client.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-indicator">
+                            <div class="circle active">3</div>
+                            <div class="line pending"></div>
+                        </div>
+                        <div class="step-content">
+                            <h4 class="step-title">Examen approfondi</h4>
+                            <span class="step-date">En attente</span>
+                            <p class="step-description">Votre réclamation sera examinée par le service concerné.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-indicator">
+                            <div class="circle pending">4</div>
+                        </div>
+                        <div class="step-content">
+                            <h4 class="step-title">Résolution</h4>
+                            <span class="step-date">En attente</span>
+                            <p class="step-description">Votre réclamation sera résolue et une réponse vous sera
+                                communiquée.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="notifications card">
-            <h2>Notifications</h2>
+        <div class="notifications complaint-card">
+            <div class="complaint-card-header">
+                <h2 class="complaint-card-title">Notifications</h2>
+            </div>
 
             <div class="notification-list">
                 <div class="notification">
                     <div class="notification-header">
-                        <div class="left">
-                            <svg class="icon" viewBox="0 0 24 24">
-                                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                        <div class="notification-type">
+                            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
+                                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
+                                    fill="currentColor" />
                             </svg>
-                            <span class="type">Message du service client</span>
+                            Message du service client
                         </div>
-                        <span class="date">16/11/2023 à 09:15</span>
+                        <span class="notification-date">16/11/2023 à 09:15</span>
                     </div>
                     <div class="notification-content">
                         Bonjour, nous avons bien reçu votre réclamation concernant le retard du train n°1234. Notre
@@ -122,16 +150,18 @@ session_start();
 
                 <div class="notification">
                     <div class="notification-header">
-                        <div class="left">
-                            <svg class="icon" viewBox="0 0 24 24">
+                        <div class="notification-type">
+                            <svg class="icon" viewBox="0 0 24 24" width="20" height="20">
                                 <path
-                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                                    fill="currentColor" />
                                 <path
-                                    d="M12 17c.55 0 1-.45 1-1v-4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .55.45 1 1 1zm-1-8h2v2h-2z" />
+                                    d="M12 17c.55 0 1-.45 1-1v-4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .55.45 1 1 1zm-1-8h2v2h-2z"
+                                    fill="currentColor" />
                             </svg>
-                            <span class="type">Mise à jour de statut</span>
+                            Mise à jour de statut
                         </div>
-                        <span class="date">15/11/2023 à 14:32</span>
+                        <span class="notification-date">15/11/2023 à 14:32</span>
                     </div>
                     <div class="notification-content">
                         Votre réclamation a été enregistrée avec succès. Un numéro de référence REC-2023-12345 vous a
@@ -141,41 +171,48 @@ session_start();
             </div>
         </div>
 
-        <div class="response card">
-            <h2>Ajouter un commentaire</h2>
-            <p class="description">Vous pouvez ajouter des informations complémentaires à votre réclamation</p>
+        <div class="response complaint-card">
+            <div class="complaint-card-header">
+                <h2 class="complaint-card-title">Ajouter un commentaire</h2>
+            </div>
+            <p class="complaint-description">Vous pouvez ajouter des informations complémentaires à votre réclamation
+            </p>
 
             <form class="response-form">
                 <div class="form-group">
-                    <label for="comment">Votre commentaire</label>
-                    <textarea id="comment" rows="5" placeholder="Écrivez votre commentaire ici..."></textarea>
+                    <label for="comment" class="form-label">Votre commentaire</label>
+                    <textarea id="comment" class="textarea" rows="5"
+                        placeholder="Écrivez votre commentaire ici..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Pièces jointes (optionnel)</label>
+                    <label class="form-label">Pièces jointes (optionnel)</label>
                     <div class="upload-area">
-                        <svg class="upload-icon" viewBox="0 0 24 24">
+                        <svg class="upload-icon" viewBox="0 0 24 24" width="24" height="24">
                             <path
-                                d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
+                                d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
+                                fill="currentColor" />
                         </svg>
                         <span>Cliquez ou glissez des fichiers ici</span>
                         <input type="file" class="file-input">
                     </div>
                 </div>
 
-                <button type="submit" class="btn primary">Envoyer</button>
+                <button type="submit" class="submit-button">Envoyer</button>
             </form>
         </div>
 
-        <div class="help-section card">
-            <div class="header">
-                <svg class="help-icon" viewBox="0 0 24 24">
+        <div class="help-section">
+            <div class="help-header">
+                <svg class="help-icon" viewBox="0 0 24 24" width="24" height="24">
                     <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"
+                        fill="currentColor" />
                 </svg>
-                <h3>Besoin d'aide?</h3>
+                <h3 class="help-title">Besoin d'aide?</h3>
             </div>
-            <p>Si vous avez des questions concernant votre réclamation, n'hésitez pas à contacter notre service client
+            <p class="help-text">Si vous avez des questions concernant votre réclamation, n'hésitez pas à contacter
+                notre service client
                 au 021 XX XX XX (du lundi au vendredi, de 8h à 17h) ou par email à reclamations@sntf.dz</p>
         </div>
     </div>

@@ -33,6 +33,12 @@ CREATE TABLE reclamation_comments (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
+ALTER TABLE reclamations 
+ADD COLUMN trip_date DATE,
+ADD COLUMN train_number VARCHAR(50),
+ADD COLUMN departure VARCHAR(100),
+ADD COLUMN arrival VARCHAR(100);
+
 CREATE INDEX idx_reclamations_user_id ON reclamations(user_id);
 CREATE INDEX idx_reclamations_statut ON reclamations(statut);
 

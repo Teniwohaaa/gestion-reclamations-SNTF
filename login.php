@@ -8,6 +8,7 @@
     <title>Connexion - Plateforme SNTF</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Styles/reclamation.css">
+    <link rel="stylesheet" href="Styles/style.css" />
 </head>
 
 <body>

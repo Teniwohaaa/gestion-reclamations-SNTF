@@ -54,7 +54,7 @@ try {
         'cloturee' => 'Clôturée'
     ];
     ?>
-
+<link rel="stylesheet" href="Styles/style.css" />
 <div class="complaint-details">
     <div class="form-group">
         <label class="form-label">Référence</label>

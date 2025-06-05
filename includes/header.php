@@ -29,20 +29,20 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="user-dropdown">
                 <button class="dropbtn">
                     <img src="images/user.png" alt="User" class="icon">
-                    <span><?php echo htmlspecialchars($_SESSION['name']); ?></span>
+                    <span><?php echo htmlspecialchars($_SESSION['name'] ?? 'Utilisateur'); ?></span>
                 </button>
                 <div class="dropdown-content">
-                    <?php if ($_SESSION['role'] === 'voyageur'): ?>
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'voyageur'): ?>
                     <a href="suivi_reclamation.php">
                         <img src="images/suiv-reclamation.png" alt="Suivi" class="icon">
                         Suivi Réclamation
                     </a>
-                    <?php elseif ($_SESSION['role'] === 'agent'): ?>
+                    <?php elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'agent'): ?>
                     <a href="agent.php">
                         <img src="images/agent.png" alt="Agent" class="icon">
                         Tableau de bord
                     </a>
-                    <?php elseif ($_SESSION['role'] === 'admin'): ?>
+                    <?php elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                     <a href="admin.php">
                         <img src="images/admin.png" alt="Admin" class="icon">
                         Administration
