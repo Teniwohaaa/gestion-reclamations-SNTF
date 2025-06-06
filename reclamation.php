@@ -1,7 +1,32 @@
 <?php
+/**
+ * Gestion des réclamations SNTF
+ * 
+ * Ce script gère le système de réclamations pour la SNTF, permettant aux utilisateurs
+ * de soumettre leurs plaintes concernant les services ferroviaires.
+ *
+ * @package SNTF
+ * @subpackage Reclamations
+ * @author SNTF Dev Team
+ * @version 1.0
+ */
+
 session_start();
 require 'database/db_connect.php';
 
+/**
+ * Traitement du formulaire de réclamation
+ * 
+ * Gère la soumission du formulaire incluant:
+ * - La validation des données
+ * - L'upload de fichiers
+ * - La création d'utilisateur si nécessaire
+ * - L'enregistrement de la réclamation
+ *
+ * @param array $_POST Les données du formulaire
+ * @param array $_FILES Les fichiers uploadés
+ * @return void
+ */
 if(isset($_POST['submit'])){
     if (isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['email']) && isset($_POST['phone']) && 
         isset($_POST['tripDate']) && isset($_POST['trainNumber']) && isset($_POST['departure']) && 
