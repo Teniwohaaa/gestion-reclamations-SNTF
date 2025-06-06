@@ -40,9 +40,9 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 - Tests fonctionnels :
 
 # Documentation :
+Lien vers la documentation technique : https://documentation.org .
 
-Lien vers la documentation technique : https://documentation.org
-La Documetation Php a etais generer avec phpdocumentor
+La Documetation Php a etais generer avec phpdocumentor.
 La Documentatione st dans `docs/`.
 veuiller ouvrire `docs/index.html` dans votre navigateur pour la consuler.
 
