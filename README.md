@@ -11,12 +11,14 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 - soumission d'une réclamation
 - Connexion pour les voyageurs, agents, et administrateurs
 - Interface simple pour consulter et suivre les réclamations
-- Tableau de bord pour agents 
-- Tableau de bord pour administrateurs 
+- Tableau de bord pour agents
+- Tableau de bord pour administrateurs
 - Base de données relationnelle MySQL
 
 # Comment utiliser ce site:
+
 ### Voyageurs
+
 1. Accédez au site via votre navigateur (URL à compléter).
 2. Rempliser une reclamation ou connectez-vous.
 3. Soumettez une réclamation :
@@ -25,22 +27,27 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
    - Ajoutez des fichiers ou images si nécessaire.
 4. Suivez l’état de votre réclamation depuis votre espace personnel :
    - `En attente`, `En cours`, `Résolue`.
-  
+
 # Technologies :
 
-- PHP 
+- PHP
 - HTML / CSS
 - MySQL
 - GitHub
 - Outils de maquettage : Figma (maquette)
 - Outils de documentation : Latex
-- Tests unitaires : 
-- Tests fonctionnels : 
+- Tests unitaires :
+- Tests fonctionnels :
 
 # Documentation :
-Lien vers la documentation technique : 
+
+Lien vers la documentation technique :
+La Documetation Php a etais generer avec phpdocumentor
+La Documentatione st dans `docs/`.
+veuiller ouvrire `docs/index.html` dans votre navigateur pour la consuler.
 
 # Importer la base de données:
+
 1. Aller sur [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
 2. Cliquer sur **"Nouvelle base de données"** dans le menu de gauche.
 3. Entrer un nom pour la base (ex: `sntf_reclamations`) et cliquer sur **"Créer"**.
@@ -49,8 +56,10 @@ Lien vers la documentation technique :
 6. Cliquer sur **"Exécuter"** pour lancer l'importation.
 
 ### Remarques
+
 - Si une base de données du même nom existe déjà, vous pouvez la supprimer avant de réimporter.
 - Cette méthode fonctionne sous XAMPP, WAMP, MAMP, ou tout serveur local utilisant phpMyAdmin.
 
 # Auteur :
+
 Ce projet a été réalisé dans le cadre d’un exercice académique.
