@@ -15,20 +15,25 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 - Tableau de bord pour administrateurs 
 - Base de données relationnelle MySQL
 
-Base de données utilisée : sntf_reclamations
-
-# Tables :
-- users
-- reclamations
-- reclamation_comments
-
+# Comment utiliser ce site:
+### Voyageurs
+1. Accédez au site via votre navigateur (URL à compléter).
+2. Rempliser une reclamation ou connectez-vous.
+3. Soumettez une réclamation :
+   - Sélectionnez le type de problème (retard, comportement du personnel, propreté, etc.).
+   - Décrivez les faits de manière claire et précise.
+   - Ajoutez des fichiers ou images si nécessaire.
+4. Suivez l’état de votre réclamation depuis votre espace personnel :
+   - `En attente`, `En cours`, `Résolue`.
+  
 # Technologies :
+
 - PHP 
 - HTML / CSS
 - MySQL
 - GitHub
 - Outils de maquettage : Figma (maquette)
-- Outils de documentation :
+- Outils de documentation : Latex
 - Tests unitaires : 
 - Tests fonctionnels : 
 
@@ -43,7 +48,7 @@ Lien vers la documentation technique :
 5. Cliquer sur **"Choisir un fichier"** et sélectionner le fichier `sntf_reclamations.sql`.
 6. Cliquer sur **"Exécuter"** pour lancer l'importation.
 
-### 📝 Remarques
+### Remarques
 - Si une base de données du même nom existe déjà, vous pouvez la supprimer avant de réimporter.
 - Cette méthode fonctionne sous XAMPP, WAMP, MAMP, ou tout serveur local utilisant phpMyAdmin.
 
