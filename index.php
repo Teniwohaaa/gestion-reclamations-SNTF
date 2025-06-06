@@ -1,3 +1,19 @@
+<?php
+/**
+ * Page d'accueil SNTF
+ * 
+ * Cette page présente:
+ * - Les services principaux de la SNTF
+ * - Le processus de réclamation
+ * - Les témoignages clients
+ * - Les liens d'accès rapide
+ *
+ * @package SNTF
+ * @subpackage Frontend
+ * @author SNTF Dev Team
+ * @version 1.0
+ */
+?>
 <!DOCTYPE html>
 <html lang="fr">
 

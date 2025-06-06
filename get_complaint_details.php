@@ -1,11 +1,33 @@
 <?php
+/**
+ * Affichage détaillé d'une réclamation
+ * 
+ * Ce script permet aux agents de visualiser les détails complets 
+ * d'une réclamation spécifique, incluant:
+ * - Les informations du client
+ * - Les détails de la réclamation
+ * - L'historique des commentaires
+ *
+ * @package SNTF
+ * @subpackage Reclamations
+ * @author SNTF Dev Team
+ * @version 1.0
+ */
+
 session_start();
 require_once 'database/db_connect.php';
 
+/**
+ * Vérification des droits d'accès
+ * Seuls les agents peuvent accéder à cette page
+ */
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'agent') {
     die("Unauthorized access");
 }
 
+/**
+ * Vérification de l'ID de la réclamation
+ */
 if (!isset($_GET['id'])) {
     die("Missing complaint ID");
 }

@@ -1,4 +1,18 @@
-<?php 
+<?php
+/**
+ * En-tête commun du site SNTF
+ * 
+ * Gère l'affichage de la barre de navigation et les actions utilisateur incluant:
+ * - Logo et navigation principale
+ * - Menu de connexion/déconnexion
+ * - Menu déroulant selon le rôle de l'utilisateur
+ *
+ * @package SNTF
+ * @subpackage Layout
+ * @author SNTF Dev Team
+ * @version 1.0
+ */
+
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }

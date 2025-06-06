@@ -1,33 +1,54 @@
 <?php
+/**
+ * Interface agent pour la gestion des réclamations
+ * 
+ * Ce script gère l'interface agent permettant de:
+ * - Visualiser les statistiques des réclamations
+ * - Filtrer et rechercher les réclamations
+ * - Mettre à jour le statut des réclamations
+ * - Ajouter des commentaires
+ *
+ * @package SNTF
+ * @subpackage Agent
+ * @author SNTF Dev Team
+ * @version 1.0
+ */
+
 require 'database/db_connect.php';
 
-// Check if user is logged in and is an agent
+/**
+ * Vérification de l'authentification et des droits d'accès
+ */
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'agent') {
     header("Location: login.php");
     exit();
 }
 
-// Get agent's name for display
+// Récupération du nom de l'agent pour l'affichage
 $agent_name = $_SESSION['name'];
 
-// Get statistics for dashboard
+/**
+ * Récupération des statistiques du tableau de bord
+ * 
+ * @return array Les compteurs des différents types de réclamations
+ */
 try {
-    // Total complaints
+    // Total des réclamations
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM reclamations");
     $stmt->execute();
     $total_complaints = $stmt->fetch()['total'];
 
-    // Pending complaints
+    // Réclamations en attente
     $stmt = $conn->prepare("SELECT COUNT(*) as pending FROM reclamations WHERE statut = 'en_attente'");
     $stmt->execute();
     $pending_complaints = $stmt->fetch()['pending'];
 
-    // Resolved complaints
+    // Réclamations résolues
     $stmt = $conn->prepare("SELECT COUNT(*) as resolved FROM reclamations WHERE statut = 'traitee'");
     $stmt->execute();
     $resolved_complaints = $stmt->fetch()['resolved'];
 
-    // In progress complaints
+    // Réclamations en cours
     $stmt = $conn->prepare("SELECT COUNT(*) as in_progress FROM reclamations WHERE statut = 'en_cours'");
     $stmt->execute();
     $in_progress_complaints = $stmt->fetch()['in_progress'];
@@ -36,7 +57,14 @@ try {
     $total_complaints = $pending_complaints = $resolved_complaints = $in_progress_complaints = 0;
 }
 
-// Handle filters and get complaints
+/**
+ * Gestion des filtres et récupération des réclamations
+ * 
+ * @param string $search Terme de recherche
+ * @param string $status Statut des réclamations
+ * @param string $type Type de réclamation
+ * @return array Liste des réclamations filtrées
+ */
 $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
 $type = $_GET['type'] ?? '';
@@ -82,7 +110,13 @@ try {
     $complaints = [];
 }
 
-//mis a jours du status
+/**
+ * Mise à jour du statut d'une réclamation
+ * 
+ * @param int $complaint_id ID de la réclamation
+ * @param string $status Nouveau statut
+ * @param string $comment Commentaire optionnel
+ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && isset($_POST['status'])) {
     $complaint_id = $_POST['complaint_id'];
     $status = $_POST['status'];
@@ -420,7 +454,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && is
     </div>
 
     <script>
-    // Modal functionality
+    /**
+     * Gestion des modales pour les réclamations
+     * 
+     * Initialise les fonctionnalités des modales de visualisation
+     * et de modification des réclamations
+     */
+
+    // Sélection des éléments DOM
     const modal = document.getElementById('complaintModal');
     const editModal = document.getElementById('editModal');
     const modalBody = document.getElementById('modalBody');
@@ -428,7 +469,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && is
     const viewButtons = document.querySelectorAll('.view-btn');
     const editButtons = document.querySelectorAll('.edit-btn');
 
-    // Open complaint modal
+    /**
+     * Gestionnaire d'ouverture de la modale de visualisation
+     * Charge les détails de la réclamation via AJAX
+     */
     viewButtons.forEach(button => {
         button.addEventListener('click', function() {
             const complaintId = this.getAttribute('data-id');
@@ -443,7 +487,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && is
         });
     });
 
-    // Open edit modal
+    /**
+     * Gestionnaire d'ouverture de la modale d'édition
+     */
     editButtons.forEach(button => {
         button.addEventListener('click', function() {
             const complaintId = this.getAttribute('data-id');
@@ -452,7 +498,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && is
         });
     });
 
-    // Close modals
+    /**
+     * Gestionnaires de fermeture des modales
+     */
     closeButtons.forEach(button => {
         button.addEventListener('click', function() {
             modal.style.display = 'none';
@@ -460,7 +508,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['complaint_id']) && is
         });
     });
 
-    // Close when clicking outside modal
+    /**
+     * Fermeture des modales lors d'un clic à l'extérieur
+     */
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';

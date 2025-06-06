@@ -128,6 +128,19 @@ if(isset($_POST['submit'])){
         }
     }
 }
+
+/**
+ * Fonction pour valider et nettoyer les entrées utilisateur
+ *
+ * @param string $data Donnée à nettoyer
+ * @return string Donnée nettoyée
+ */
+function cleanInput($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
 ?>
 <!DOCTYPE html>
 <html>

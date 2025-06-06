@@ -1,3 +1,22 @@
+<?php
+/**
+ * Page de suivi des réclamations
+ * 
+ * Permet aux utilisateurs de:
+ * - Rechercher une réclamation par son numéro
+ * - Visualiser l'état d'avancement
+ * - Consulter les notifications
+ * - Ajouter des commentaires
+ *
+ * @package SNTF
+ * @subpackage Reclamations
+ * @author SNTF Dev Team
+ * @version 1.0
+ */
+
+session_start();
+include 'includes/header.php'; 
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <meta charset="UTF-8">
@@ -6,10 +25,6 @@
 
 <link rel="stylesheet" href="Styles/suivireclamation.css">
 
-<?php
-session_start();
-include 'includes/header.php'; 
-?>
 
 <div class="complaint-tracking">
     <div class="hero-section">
