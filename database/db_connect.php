@@ -40,7 +40,7 @@ $options = [
 try {
     $conn = new PDO($dsn, $user, $pass, $options);
 } catch (PDOException $e) {
-    error_log("Database connection failed: " . $e->getMessage());
+    error_log("Erruer durant la connection a la base de données: " . $e->getMessage());
     die("Une erreur est survenue. Veuillez réessayer plus tard.");
 }
 ?>
