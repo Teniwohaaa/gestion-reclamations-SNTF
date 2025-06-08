@@ -35,16 +35,15 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 - MySQL
 - GitHub
 - Outils de maquettage : Figma (maquette)
-- Outils de documentation : Latex
+- Outils de documentation : Latex, phpDoumentor
 - Tests unitaires :
 - Tests fonctionnels :
 
 # Documentation :
-
-Lien vers la documentation technique :
-La Documetation Php a etais generer avec phpdocumentor
-La Documentatione st dans `docs/`.
-veuiller ouvrire `docs/index.html` dans votre navigateur pour la consuler.
+- Lien vers la documentation technique : https://documentation.org 
+- La Documetation Php a etais generer avec phpdocumentor.
+- La Documentatione est dans `docs/`.
+- veuiller ouvrire `docs/index.html` dans votre navigateur pour la consuler.
 
 # Importer la base de données:
 
