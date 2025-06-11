@@ -54,10 +54,10 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 - **Base de données** : MySQL (gérée via phpMyAdmin)
 - **Langage secondaire** : Python (utilisé pour les tests fonctionnels)
 - **SQL**
-- GitHub
-- Outils de maquettage : Figma (maquette)
-- Outils de documentation : Latex, phpDoumentor
-- Tests fonctionnels : Selenium
+- **GitHub**
+- **Outils de maquettage** : Figma (maquette)
+- **Outils de documentation** : Latex, phpDoumentor
+- **Tests fonctionnels** : Selenium
 
 ## Environnement de développement
 
