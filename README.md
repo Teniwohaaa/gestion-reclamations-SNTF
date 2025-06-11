@@ -13,13 +13,13 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 - Interface simple pour consulter et suivre les réclamations
 - Tableau de bord pour agents
 - Tableau de bord pour administrateurs
-- Base de données relationnelle MySQL
+- Base de données relationnelle SQL
 
 # Comment utiliser ce site:
 
 ### Voyageurs
 
-1. Accédez au site via votre navigateur (URL à compléter).
+1. Accédez au site via votre navigateur.
 2. Rempliser une reclamation ou connectez-vous.
 3. Soumettez une réclamation :
    - Sélectionnez le type de problème (retard, comportement du personnel, propreté, etc.).
@@ -27,6 +27,25 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
    - Ajoutez des fichiers ou images si nécessaire.
 4. Suivez l’état de votre réclamation depuis votre espace personnel :
    - `En attente`, `En cours`, `Résolue`.
+### Agents
+
+1. Accédez au site via votre navigateur.
+2. Connectez-vous à votre espace personnel.
+3. Accédez à votre tableau de bord :
+   - Consulter et filtrer les réclamations.
+   - Gérer les utilisateurs.
+   - Envoyer des rapports.
+   - Suivre l’évolution des réclamations.
+
+### Administrateurs
+
+1. Accédez au site via votre navigateur.
+2. Connectez-vous à votre espace administrateur.
+3. Tableau de bord administrateur :
+   - Gestion avancée des utilisateurs et des agents.
+   - Visualisation globale de l’ensemble des réclamations.
+   - Accès aux statistiques et aux rapports.
+   - Paramétrage et configuration du système.
 
 # Technologies :
 
