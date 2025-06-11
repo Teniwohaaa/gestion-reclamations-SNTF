@@ -32,7 +32,8 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 
 - PHP
 - HTML / CSS
-- MySQL
+- SQL
+- Python
 - GitHub
 - Outils de maquettage : Figma (maquette)
 - Outils de documentation : Latex, phpDoumentor
@@ -41,10 +42,14 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 
 # Documentation :
 
-- Lien vers la documentation technique : https://documentation.org
+- Lien vers la documentation technique [ici](https://github.com/Teniwohaaa/gestion-reclamations-SNTF/raw/main/docs/Documentation.pdf)
 - La Documetation Php a etais generer avec phpdocumentor.
 - La Documentatione est dans `docs/`.
 - veuiller ouvrire `docs/index.html` dans votre navigateur pour la consuler.
+
+# Maquette:
+
+La maquette de ce projet a été réalisée sur [Figma](https://www.figma.com/design/1W9omYV5qntg2eFAaeD6Sq/Project_SNTF?m=auto&t=bFPPvW3IFLarsobs-1).
 
 # Importer la base de données:
 
@@ -64,14 +69,14 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 
 Un test fonctionnel a été réalisé avec l’outil Selenium afin de simuler un utilisateur se connectant via l’interface du site.
 
-## Script :
+### Script :
 
 Deux scripts de test fonctionnel ont été réalisés à l’aide de **Selenium** :
 
 - `login_test.py` : teste la page de connexion (`login.php`)
 - `reclamation_test.py` : teste le formulaire de réclamation (`reclamation.php`)
 
-## Description :
+### Description :
 
 Chaque script contient **deux scénarios** :
 
@@ -80,9 +85,7 @@ Chaque script contient **deux scénarios** :
 
 Ces tests permettent de vérifier que les formulaires fonctionnent correctement en conditions réelles.
 
-## Lancer le test :
-
-## Exécution des tests
+### Lancer le test :
 
 utilisez l'une des commandes Pour lancer les tests:
 
