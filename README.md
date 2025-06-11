@@ -36,11 +36,12 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 - GitHub
 - Outils de maquettage : Figma (maquette)
 - Outils de documentation : Latex, phpDoumentor
-- Tests unitaires :
-- Tests fonctionnels :
+- Tests unitaires : //
+- Tests fonctionnels : Selenium
 
 # Documentation :
-- Lien vers la documentation technique : https://documentation.org 
+
+- Lien vers la documentation technique : https://documentation.org
 - La Documetation Php a etais generer avec phpdocumentor.
 - La Documentatione est dans `docs/`.
 - veuiller ouvrire `docs/index.html` dans votre navigateur pour la consuler.
@@ -58,6 +59,40 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 
 - Si une base de données du même nom existe déjà, vous pouvez la supprimer avant de réimporter.
 - Cette méthode fonctionne sous XAMPP, WAMP, MAMP, ou tout serveur local utilisant phpMyAdmin.
+
+# Test fonctionnel automatisé (Selenium)
+
+Un test fonctionnel a été réalisé avec l’outil Selenium afin de simuler un utilisateur se connectant via l’interface du site.
+
+## Script :
+
+Deux scripts de test fonctionnel ont été réalisés à l’aide de **Selenium** :
+
+- `login_test.py` : teste la page de connexion (`login.php`)
+- `reclamation_test.py` : teste le formulaire de réclamation (`reclamation.php`)
+
+## Description :
+
+Chaque script contient **deux scénarios** :
+
+1. Scénario réussi — l’utilisateur saisit des informations valides, la connexion ou la soumission est acceptée.
+2. Scénario échoué — l’utilisateur saisit des informations invalides, un message d’erreur s’affiche.
+
+Ces tests permettent de vérifier que les formulaires fonctionnent correctement en conditions réelles.
+
+## Lancer le test :
+
+## Exécution des tests
+
+utilisez l'une des commandes Pour lancer les tests:
+
+```bash
+python login_test.py
+
+python reclamation_test.py
+```
+
+**Note**: Assurez-vous que Selenium WebDriver est correctement installé et configuré avant d'exécuter les tests.
 
 # Auteur :
 
