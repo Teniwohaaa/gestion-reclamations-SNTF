@@ -13,7 +13,7 @@ L'application permettra aux voyageurs de soumettre facilement leurs plaintes ou 
 - Interface simple pour consulter et suivre les réclamations
 - Tableau de bord pour agents
 - Tableau de bord pour administrateurs
-- Base de données relationnelle MySQL
+- Base de données relationnelle SQL
 
 # Comment utiliser ce site:
 
